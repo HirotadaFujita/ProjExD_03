@@ -166,7 +166,22 @@ class Explosion:
             
         else:
             screen.blit(self.gazou[0], self.rct)
-            
+
+
+class Score:
+    
+    def __init__(self):
+        self.font=pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
+        self.color = (0, 0, 255)
+        self.score = 0
+        self.img=self.font.render("スコア", 0, self.color)
+        self.rct = self.img.get_rect()
+        self.rct.centerx = 100
+        self.rct.centery = 50
+
+    def update(self, screen:pg.surface):
+        screen.blit(self.img, self.rct)
+        
 
 
 def main():
@@ -175,6 +190,7 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
     bg_img = pg.image.load("ex03/fig/pg_bg.jpg")
     bird = Bird(3, (900, 400))
+    score = Score()
     bombs = [Bomb() for _ in range(NUM_OF_BOMBS)]
     beam = None
 
@@ -208,6 +224,7 @@ def main():
                     kara.append(explosion)
                     bird.change_img(6, screen)
                     explosion.update(screen)
+                    score.update(screen)
                     pg .display.update()
         bombs = [bomb for bomb in bombs if bomb is not None]
                 
