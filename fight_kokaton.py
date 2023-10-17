@@ -144,7 +144,33 @@ class Bomb:
         screen.blit(self.img, self.rct)
 
 
+class Explosion:
+    """
+    爆破に関するクラス
+    """
+    def __init__(self, bomb:Bomb):
+        self.img = pg.image.load(f"ex03/fig/explosion.gif")
+        self.gazou = [self.img, pg.transform.flip(self.img, True, False), pg.transform.flip(self.img, False, True)]
+        self.rct = self.img.get_rect()
+        self.rct.centery = bomb.rct.centery
+        self.rct.centerx = bomb.rct.centerx
+        self.life = 9
+
+    def update(self, screen:pg.surface):
+        self.life -= 1
+        if self.life % 3 == 0:
+            screen.blit(self.gazou[2], self.rct)
+           
+        elif self.life % 3 == 1:
+            screen.blit(self.gazou[1], self.rct)
+            
+        else:
+            screen.blit(self.gazou[0], self.rct)
+            
+
+
 def main():
+    kara = [] #Explosion用のカラリスト
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
     bg_img = pg.image.load("ex03/fig/pg_bg.jpg")
@@ -178,7 +204,10 @@ def main():
                     #撃墜＝Noneにする
                     beam = None
                     bombs[i] = None
+                    explosion = Explosion(bomb)
+                    kara.append(explosion)
                     bird.change_img(6, screen)
+                    explosion.update(screen)
                     pg .display.update()
         bombs = [bomb for bomb in bombs if bomb is not None]
                 
